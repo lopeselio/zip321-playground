@@ -6,7 +6,7 @@ wallet would pay, or why the request is rejected.
 
 **Live:** https://lopeselio.github.io/zip321-playground/
 
-It is built on [zip321](https://github.com/lopeselio/zip321-js), a pure-TypeScript ZIP-321 implementation with
+It is built on [zcash-zip321](https://github.com/lopeselio/zcash-zip321), a pure-TypeScript ZIP-321 implementation with
 no WASM and no runtime dependencies. The library is about 7 kB gzipped and parses a request in well under a
 millisecond, so a page like this needs nothing else. Everything runs in the browser; nothing is sent anywhere.
 
