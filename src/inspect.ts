@@ -1,5 +1,4 @@
 import {
-  decodeAddress,
   formatPaymentRequest,
   memoText,
   parsePaymentRequest,
@@ -11,7 +10,7 @@ import {
   type ZIP321Options,
 } from 'zip321';
 import { ADDRESS_KIND_NAMES, groupDigits, networksLabel, receiverName, toHex, zecString } from './format.ts';
-import { markParam, splitKey, tokenize, type Token } from './tokens.ts';
+import { markParam, tokenize, type Token } from './tokens.ts';
 
 export interface InspectOptions {
   /** Required network, or `undefined` for any. */
@@ -82,8 +81,6 @@ export interface ErrorView {
   /** What the error code means in general. */
   description: string;
   param?: string;
-  /** True when the library did not name the parameter and the playground worked it out. */
-  paramInferred: boolean;
 }
 
 export interface InvalidView {
@@ -136,7 +133,7 @@ export function inspect(input: string, options: InspectOptions = {}): InspectRes
   try {
     request = parsePaymentRequest(uri, libOptions);
   } catch (err) {
-    const error = describeError(err, uri);
+    const error = describeError(err);
     return { status: 'invalid', uri, trimmed, error, tokens: markParam(tokenize(uri), error.param) };
   }
 
@@ -146,7 +143,7 @@ export function inspect(input: string, options: InspectOptions = {}): InspectRes
     canonical = formatPaymentRequest(request, libOptions);
   } catch (err) {
     // The library re-parses what it formats, so this would be a library bug. Report it as one.
-    const error = describeError(err, uri);
+    const error = describeError(err);
     return { status: 'invalid', uri, trimmed, error: { ...error, code: 'UNEXPECTED' }, tokens: tokenize(uri) };
   }
 
@@ -226,45 +223,19 @@ function paymentView(p: Payment): PaymentView {
   return view;
 }
 
-export function describeError(err: unknown, uri: string): ErrorView {
+export function describeError(err: unknown): ErrorView {
   if (!(err instanceof ZIP321Error)) {
     return {
       code: 'UNEXPECTED',
       message: err instanceof Error ? err.message : String(err),
       description: ERROR_DESCRIPTIONS.UNEXPECTED!,
-      paramInferred: false,
     };
   }
   const view: ErrorView = {
     code: err.code,
     message: err.message,
     description: ERROR_DESCRIPTIONS[err.code] ?? '',
-    paramInferred: false,
   };
   if (err.param !== undefined) view.param = err.param;
-  else if (err.code === 'INVALID_ADDRESS' || err.code === 'UNSUPPORTED_ADDRESS') {
-    // decodeAddress does not know which parameter it was given; find the first address
-    // (in payment order, as the parser checks them) that fails the same way.
-    const param = locateBadAddress(uri, err.code);
-    if (param) {
-      view.param = param;
-      view.paramInferred = true;
-    }
-  }
   return view;
-}
-
-function locateBadAddress(uri: string, code: string): string | undefined {
-  const addresses = tokenize(uri)
-    .filter((t) => t.key !== undefined && splitKey(t.key)[0].toLowerCase() === 'address' && typeof t.value === 'string')
-    .map((t) => ({ key: t.key!, value: t.value!, index: splitKey(t.key!)[1] }))
-    .sort((a, b) => a.index - b.index);
-  for (const a of addresses) {
-    try {
-      decodeAddress(a.value);
-    } catch (err) {
-      if (err instanceof ZIP321Error && err.code === code) return a.key;
-    }
-  }
-  return undefined;
 }

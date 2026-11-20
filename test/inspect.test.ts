@@ -155,7 +155,6 @@ test('errors carry the code, message, description and marked parameter', () => {
   const view = invalid(inspect(`zcash:?address=${T_ADDR}&amount=1&address.1=${Z_ADDR}&amount.1=0.123456789`));
   assert.equal(view.error.code, 'INVALID_AMOUNT');
   assert.equal(view.error.param, 'amount.1');
-  assert.equal(view.error.paramInferred, false);
   assert.match(view.error.message, /0\.123456789/);
   assert.match(view.error.description, /8 decimals/);
   assert.deepEqual(marked(view), ['amount.1=0.123456789']);
@@ -175,12 +174,11 @@ test('the path address is marked for errors on "address"', () => {
   assert.deepEqual(marked(view), [Z_ADDR]);
 });
 
-test('a bad address checksum is located even though the library gives no param', () => {
+test('a bad address checksum marks the parameter that holds it', () => {
   const typo = Z_ADDR.slice(0, -1) + 'x';
   const view = invalid(inspect(`zcash:?address=${T_ADDR}&address.1=${typo}&amount.1=1`));
   assert.equal(view.error.code, 'INVALID_ADDRESS');
   assert.equal(view.error.param, 'address.1');
-  assert.equal(view.error.paramInferred, true);
   assert.deepEqual(marked(view), [`address.1=${typo}`]);
 });
 

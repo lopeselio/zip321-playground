@@ -212,7 +212,6 @@ function renderError(view: InvalidView): HTMLElement {
           'dd',
           null,
           error.param ? h('code', { class: 'mono' }, error.param) : h('span', { class: 'muted' }, 'none (the URI as a whole)'),
-          error.paramInferred ? h('span', { class: 'sub' }, 'The library does not name the parameter for address errors; the playground located it.') : null,
         ),
       ),
     ),
