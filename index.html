@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="description"
+      content="Inspect and validate Zcash ZIP-321 payment request URIs in your browser. Built on zip321, a pure-TypeScript implementation with no WASM."
+    />
+    <title>ZIP-321 Playground</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23f4b728'/%3E%3Cpath d='M10 9h12v3.2L14.6 20H22v3H10v-3.2L17.4 12H10z' fill='%231a1a1a'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <a class="skip-link" href="#uri">Skip to the URI input</a>
+    <header class="site-header">
+      <div class="wrap">
+        <h1>ZIP-321 Playground</h1>
+        <p class="tagline">
+          Paste a <code>zcash:</code> payment request URI to see what a wallet would pay. Everything runs in your browser;
+          nothing is sent anywhere.
+        </p>
+      </div>
+    </header>
+
+    <main class="wrap layout">
+      <section class="panel input-panel" aria-labelledby="input-heading">
+        <h2 id="input-heading">Request</h2>
+        <label class="field-label" for="uri">Payment request URI</label>
+        <textarea
+          id="uri"
+          rows="6"
+          spellcheck="false"
+          autocapitalize="off"
+          autocomplete="off"
+          autocorrect="off"
+          placeholder="zcash:u1…?amount=1.5&amp;memo=…"
+          aria-describedby="uri-hint"
+        ></textarea>
+        <p id="uri-hint" class="hint">Results update as you type. The URI is kept in the page address, so you can share the link.</p>
+
+        <div class="toolbar">
+          <div class="control">
+            <label class="field-label" for="examples">Examples</label>
+            <select id="examples">
+              <option value="">Load an example…</option>
+            </select>
+          </div>
+          <div class="buttons">
+            <button type="button" id="scan" class="button" hidden>Scan QR</button>
+            <button type="button" id="upload" class="button">Upload QR image</button>
+            <input type="file" id="file" accept="image/*" hidden />
+            <button type="button" id="clear" class="button button-quiet">Clear</button>
+          </div>
+        </div>
+
+        <div id="scanner" class="scanner" hidden>
+          <video id="video" muted playsinline aria-label="Camera preview"></video>
+          <div class="scanner-bar">
+            <span>Point the camera at a QR code.</span>
+            <button type="button" id="stop-scan" class="button">Stop camera</button>
+          </div>
+        </div>
+        <p id="qr-status" class="qr-status" role="status" aria-live="polite"></p>
+
+        <fieldset class="options">
+          <legend>Options</legend>
+          <div class="control">
+            <label class="field-label" for="network">Expected network</label>
+            <select id="network">
+              <option value="">Any</option>
+              <option value="main">Mainnet</option>
+              <option value="test">Testnet</option>
+              <option value="regtest">Regtest</option>
+            </select>
+          </div>
+          <div class="check">
+            <input type="checkbox" id="validate" checked aria-describedby="validate-hint" />
+            <label for="validate">Validate addresses</label>
+          </div>
+          <p id="validate-hint" class="hint">
+            Decode and checksum every address, including Unified Address receivers. Turn off to accept address types
+            newer than the library.
+          </p>
+        </fieldset>
+      </section>
+
+      <section class="results-panel" aria-labelledby="results-heading">
+        <h2 id="results-heading">Result</h2>
+        <div id="summary" class="summary" role="status" aria-live="polite" aria-atomic="true"></div>
+        <div id="results"></div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>
+          Built with <a href="https://github.com/lopeselio/zip321-js">zip321</a> (pure TypeScript, no WASM, zero runtime
+          dependencies). <span class="size-note"><!--bundle-size--></span>
+        </p>
+        <p>Example addresses come from the ZIP-321 specification and public test vectors.</p>
+      </div>
+    </footer>
+    <div id="announcer" class="visually-hidden" aria-live="polite"></div>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
