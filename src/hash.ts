@@ -1,4 +1,4 @@
-import type { Network } from 'zip321';
+import type { Network } from 'zcash-zip321';
 
 /** What the URL hash records, so a link reproduces what the sender saw. */
 export interface ShareState {

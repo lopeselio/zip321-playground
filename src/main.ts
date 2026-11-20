@@ -1,5 +1,5 @@
 import './style.css';
-import type { Network } from 'zip321';
+import type { Network } from 'zcash-zip321';
 import { announce, byId, h } from './dom.ts';
 import { EXAMPLES } from './examples.ts';
 import { decodeHash, encodeHash } from './hash.ts';

@@ -8,7 +8,7 @@ import {
   type Payment,
   type ReceiverKind,
   type ZIP321Options,
-} from 'zip321';
+} from 'zcash-zip321';
 import { ADDRESS_KIND_NAMES, groupDigits, networksLabel, receiverName, toHex, zecString } from './format.ts';
 import { markParam, tokenize, type Token } from './tokens.ts';
 

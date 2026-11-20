@@ -20,7 +20,7 @@
   "dependencies": {
     "jsqr": "^1.4.0",
     "qrcode": "^1.5.4",
-    "zip321": "github:lopeselio/zip321-js"
+    "zcash-zip321": "^0.1.0"
   },
   "devDependencies": {
     "@types/node": "^22.18.0",

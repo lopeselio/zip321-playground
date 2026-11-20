@@ -1,4 +1,4 @@
-import type { Network } from 'zip321';
+import type { Network } from 'zcash-zip321';
 
 // Example data only: addresses from the ZIP-321 spec, the zip321 test suite and the public
 // zcash-test-vectors Unified Address vectors. None of these belong to anyone's wallet.

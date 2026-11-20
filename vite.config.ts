@@ -52,7 +52,7 @@ export default defineConfig({
       output: {
         // Keep the library in its own chunk so its size can be reported on the page.
         codeSplitting: {
-          groups: [{ name: 'zip321', test: /[\\/]node_modules[\\/]zip321[\\/]/ }],
+          groups: [{ name: 'zip321', test: /[\\/]node_modules[\\/]zcash-zip321[\\/]/ }],
         },
       },
     },

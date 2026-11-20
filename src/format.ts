@@ -1,4 +1,4 @@
-import type { AddressKind, Network, ReceiverKind } from 'zip321';
+import type { AddressKind, Network, ReceiverKind } from 'zcash-zip321';
 
 const ZAT_PER_ZEC = 100_000_000n;
 
